@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="js/jquery-2.0.0.min.js"></script>
+    <title>--帕琪站维护中--</title>
+    <link rel="icon" href="img/favicon.png" />
+  </head>
+  <body>
+    <!-- 页头 -->
+    <div class="head">Patchyvideo -- Maintaining</div>
+    <!-- 正文 -->
+    <div class="main">
+      <div class="content">
+        <h1>抱歉,帕琪站正在维护中......暂时无法访问</h1>
+        <h3>对此产生的不便表示非常抱歉QAQ</h3>
+        <img class="QAQ" src="img/QAQ.png" />
+      </div>
+    </div>
+    <script>
+      // 弹幕文本
+      var barrager = [
+        "666",
+        "2333",
+        "测试",
+        "小恶魔可爱!",
+        "嫦娥啊你看到了吗!",
+        "wwwwwwwww"
+      ];
+      // 弹幕颜色选择
+      var color = [
+        "#ff9999",
+        "#35d2f4",
+        "#9ee353",
+        "#9d77ff",
+        "#4785d9",
+        "#ff9333",
+        "#5bdea8",
+        "#51befc"
+      ];
+      // 弹幕ID
+      var index = 0;
+      // 弹幕类
+      class Barrager {
+        constructor() {
+          // 弹幕的jQuery元素
+          this.newBarrager;
+          // 弹幕的ID
+          this.ID = index;
+          // 弹幕的文本
+          this.text = this.getText();
+          // 弹幕的颜色
+          this.color = this.getColor();
+          // 弹幕的Y轴坐标(以屏幕顶端为0,向下为正方向)
+          this.positionY = this.getPositionY();
+          // 弹幕的字体大小
+          this.fontSize = this.getSize();
+          // 弹幕的移动速度
+          this.speed = this.getSpeed();
+
+          this._init();
+        }
+        // 初始化
+        _init() {
+          // 随机弹幕文本
+          this.newBarrager = $("<span id='" + index + "'></span>").text(
+            this.text
+          );
+
+          // 插入元素
+          $(".main").append(this.newBarrager);
+
+          // 设置css
+          this.newBarrager.css({
+            color: this.color,
+            position: "absolute",
+            top: this.positionY,
+            right: -500,
+            fontSize: this.fontSize,
+            whiteSpace: "nowrap"
+          });
+
+          // 设置运动效果
+          var _this = this;
+          var _w = $(".main").outerWidth(!0);
+          this.newBarrager.animate(
+            {
+              right: +_w + 100
+            },
+            this.speed,
+            "linear",
+            () => {
+              _this.distroyBarrager();
+            }
+          );
+        }
+        // 获取随机文本
+        getText() {
+          return barrager[Math.floor(Math.random() * barrager.length)];
+        }
+        // 获取随机颜色
+        getColor() {
+          return color[Math.floor(Math.random() * barrager.length)];
+        }
+        // 获取初始高度(高度在70~570之间随机)
+        getPositionY() {
+          return Math.floor(Math.random() * 500) + 70 + "px";
+        }
+        // 获取初始大小(字体在20~50之间随机)
+        getSize() {
+          return Math.floor(Math.random() * 30) + 20 + "px";
+        }
+        // 获取运动速度(动画时间在8~10秒之间随机)
+        getSpeed() {
+          return Math.floor(Math.random() * 2000) + 8000;
+        }
+        // 销毁弹幕元素
+        distroyBarrager() {
+          $("#" + this.ID).remove();
+        }
+      }
+
+      // (伪)随机时间生成弹幕
+      function initBarrager() {
+        var bger = new Barrager();
+        clearInterval(createBarrager);
+        // 生成弹幕ID
+        index++;
+        createBarrager = setInterval(initBarrager, getRandomTime());
+      }
+
+      // (伪)随机时间生成方法
+      // 生成公式为y = 1.1^x / 1.1^100 * 3000 (0<= x <=100)
+      function getRandomTime() {
+        return Math.floor(
+          (Math.pow(1.1, Math.random() * 100) / Math.pow(1.1, 100)) * 3000
+        );
+      }
+
+      // 程序入口
+      var createBarrager = setInterval(initBarrager, 0);
+    </script>
+  </body>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background-color: rgba(216, 191, 216, 0.123);
+    }
+    .head {
+      width: 100%;
+      height: 50px;
+      background-color: rgba(226, 43, 202, 0.376);
+      color: white;
+      font-size: 35px;
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+    }
+    .main {
+      width: calc(100% - 60px);
+      height: calc(100% - 110px);
+      margin: 0 auto;
+      padding: 30px;
+      overflow: hidden;
+    }
+    .content {
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .QAQ {
+      width: 250px;
+    }
+    @media screen and (max-width: 800px) {
+      .head {
+        font-size: 20px;
+      }
+    }
+  </style>
+</html>
